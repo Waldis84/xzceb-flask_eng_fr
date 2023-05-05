@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Machine Translation App</title>
+  </head>
+  <body>
+    <h1>Machine Translation App</h1>
+    <form id="translate-form">
+      <label for="input-text">Enter text to translate:</label>
+      <textarea id="input-text" name="text" rows="4" cols="50"></textarea>
+      <br>
+      <button type="button" onclick="translate('eng_fr')">Translate to French</button>
+      <button type="button" onclick="translate('fr_eng')">Translate to English</button>
+    </form>
+    <div id="translation-result"></div>
+    <script>
+      function translate(endpoint) {
+        var inputText = document.getElementById("input-text").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/" + endpoint, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onreadystatechange = function() {
+          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            var response = JSON.parse(this.responseText);
+            document.getElementById("translation-result").innerHTML = response.translation;
+          }
+        };
+        xhr.send(JSON.stringify({text: inputText}));
+      }
+    </script>
+  </body>
+</html>
